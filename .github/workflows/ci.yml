@@ -1,0 +1,56 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14.x'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run compile
+      - run: npm run build:js
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install Dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install -r tests/requirements.txt
+      - name: Build Backends
+        run: |
+          . venv/bin/activate
+          npm run build:backends
+          npm run clean:compile
+      - name: Build binaries
+        run: |
+          . venv/bin/activate
+          python setup.py sdist bdist_wheel
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dash_tree_checklist.tar.gz
+          path: dist/dash_tree_checklist*.tar.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dash_tree_checklist-py3-none-any.whl
+          path: dist/dash_tree_checklist*-py3-none-any.whl

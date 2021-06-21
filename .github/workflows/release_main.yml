@@ -1,0 +1,128 @@
+name: Release Main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  correct_repository:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail on fork
+        if: github.repository_owner != 'sgratzl'
+        run: exit 1
+
+  create_release:
+    needs: correct_repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14'
+      - name: Extract version
+        id: extract_version
+        run: node -pe "'::set-output name=version::' + require('./package.json').version"
+      - name: Create Release
+        id: create_release
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          version: ${{ steps.extract_version.outputs.version }}
+          publish: true
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      tag_name: ${{ steps.create_release.outputs.tag_name }}
+
+  build_assets:
+    needs: create_release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.OS }}-node2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node2-
+      - run: npm ci
+      - run: npm run compile
+      - run: npm run build:js
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install Dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Build Backends
+        run: |
+          . venv/bin/activate
+          npm run build:backends
+          npm run clean:compile
+      - name: Build binaries
+        run: |
+          . venv/bin/activate
+          python setup.py sdist bdist_wheel
+          mv dist/dash_tree_checklist*.tar.gz dist/dash_tree_checklist.tar.gz
+          mv dist/dash_tree_checklist*-py3-none-any.whl dist/dash_tree_checklist-py3-none-any.whl
+      - name: Upload Release Asset
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'dist/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ needs.create_release.outputs.tag_name }}
+      - name: Create binaries
+        run: |
+          mkdir -p binaries/src
+          cp -r dash_tree_checklist deps inst man R .Rbuildignore DESCRIPTION NAMESPACE Project.toml setup.py package.json ./binaries/
+          cp -r src/*.jl ./binaries/src/
+      - name: Deploy to binaries branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./binaries
+          publish_branch: binaries
+          force_orphan: true
+
+  sync_dev:
+    needs: correct_repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Reset dev branch
+        run: |
+          git fetch origin main:main
+          git reset --hard main
+      - name: Create pull request into dev
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: bot/sync-main-dev
+          commit-message: 'chore: sync main-dev'
+          base: dev
+          title: 'chore: sync main->dev'
+          labels: chore
+          reviewers: sgratzl
+          assignees: sgratzl
+          body: |
+            Syncing Main->Dev.
