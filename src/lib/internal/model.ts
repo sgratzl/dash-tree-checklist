@@ -60,3 +60,24 @@ export function filterTree(tree: DashTreeNode[], filter: (node: DashTreeNode) =>
   });
   return filtered;
 }
+
+export function expandToFirstMatch(tree: DashTreeNode[], filter: (node: DashTreeNode) => boolean): Set<string> {
+  const mustHave = new Set<string>();
+  if (tree.length === 0) {
+    return mustHave;
+  }
+  const pathToMatch = (node: DashTreeNode) => {
+    if (node.children) {
+      // expand first hit
+      mustHave.add(node.id);
+    }
+    if (filter(node)) {
+      return;
+    }
+    if (node.children && node.children.length > 0) {
+      pathToMatch(node.children[0]);
+    }
+  };
+  pathToMatch(tree[0]);
+  return mustHave;
+}

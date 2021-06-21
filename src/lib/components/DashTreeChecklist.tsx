@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import PropTypes from 'prop-types';
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { DashTreeNode, filterTree, asFilterFunction } from '../internal/model';
+import { DashTreeNode, filterTree, asFilterFunction, expandToFirstMatch } from '../internal/model';
 import './DashTreeChecklist.css';
 import TreeChecklistNode from '../internal/components/TreeChecklistNode';
 import { classNames } from '../utils';
@@ -87,6 +87,13 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
     () => (searchValue ? filterTree(tree, (node) => node.name.includes(searchValue)) : tree),
     [tree, searchValue]
   );
+  const searchExpanded = useMemo(() => {
+    const first = expandToFirstMatch(filteredTree, (node) => node.name.includes(searchValue));
+    return {
+      toggle: expanded.toggle,
+      has: (v: DashTreeNode) => expanded.has(v) || first.has(v.id),
+    };
+  }, [expanded, filteredTree, searchValue]);
 
   return (
     <div id={id} className={classNames('dash-tree-checklist', className)} style={style}>
@@ -110,7 +117,7 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
               key={n.id}
               node={n}
               selected={selected}
-              expanded={searchValue ? undefined : expanded}
+              expanded={searchValue ? searchExpanded : expanded}
               className={nodeClassName}
               style={nodeStyle}
             />
