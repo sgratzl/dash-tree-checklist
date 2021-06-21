@@ -1,0 +1,88 @@
+
+.dash-tree-checklist {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25em;
+  color: #666;
+}
+
+.dash-tree-checklist h5 {
+  margin: 0.5em 0 0.25em 0;
+  font-weight: normal;
+  opacity: 0.5;
+}
+
+.dash-tree-checklist-selection {
+  border-bottom: 1px solid #eeeeee;
+  min-height: 1.5em;
+}
+
+.dash-tree-checklist-selection:empty::after {
+  content: 'Select one more more nodes from below';
+  opacity: 0.5;
+}
+
+
+.dash-tree-checklist-tree-search {
+  margin-bottom: 0.25em;
+}
+
+
+.dash-tree-checklist-tree-wrapper {
+  flex: 1 1 0;
+  position: relative;
+}
+
+.dash-tree-checklist-tree-wrapper > div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+
+.dash-tree-checklist-node {
+}
+
+.dash-tree-checklist-node-name {
+  position: relative;
+  padding: 0;
+  padding-left: 0.8em;
+}
+
+button.dash-tree-checklist-node-name {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+button.dash-tree-checklist-node-name:hover {
+  color: black;
+}
+
+.dash-tree-checklist-node__inner > .dash-tree-checklist-node-name::before {
+  content: '›';
+  transition: transform 0.25s ease;
+  position: absolute;
+  left: 0;
+  width: 0.8em;
+  height: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash-tree-checklist-node__expanded > .dash-tree-checklist-node-name::before {
+  transform: rotate(90deg);
+}
+
+.dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name {
+  cursor: pointer;
+}
+.dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name:hover {
+  color: black
+}

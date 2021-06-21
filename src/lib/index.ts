@@ -3,7 +3,8 @@ import DashTreeChecklist from './components/DashTreeChecklist';
 
 export type {
   DashChangeAbleTreeChecklistProps,
-  DashReadOnlyLayoutTreeChecklistProps,
+  DashTreeNode,
+  DashReadOnlyTreeChecklistProps,
   DashTreeChecklistProps,
 } from './components/DashTreeChecklist';
 
