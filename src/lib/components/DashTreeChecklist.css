@@ -63,7 +63,7 @@ button.dash-tree-checklist-node-name:hover {
 }
 
 .dash-tree-checklist-node-children {
-  padding-left: 0.3em;
+  padding-left: 0.7em;
 }
 
 .dash-tree-checklist-node__inner > .dash-tree-checklist-node-name {
@@ -75,11 +75,14 @@ button.dash-tree-checklist-node-name:hover {
   transition: transform 0.25s ease;
   position: absolute;
   left: 0;
+  top: 0.1em;
   width: 0.8em;
-  height: 0.9em;
+  height: 0.8em;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
+  font-size: 120%;
 }
 
 .dash-tree-checklist-node__expanded > .dash-tree-checklist-node-name::before {
@@ -89,6 +92,8 @@ button.dash-tree-checklist-node-name:hover {
 .dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name {
   cursor: pointer;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 .dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name:hover {
   color: black;
