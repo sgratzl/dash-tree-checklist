@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import PropTypes, { Validator } from 'prop-types';
@@ -6,7 +7,7 @@ import { DashTreeNode, filterTree, asFilterFunction } from '../internal/model';
 import './DashTreeChecklist.css';
 import TreeChecklistNode from '../internal/components/TreeChecklistNode';
 import { classNames } from '../utils';
-import { useLatest } from './hooks';
+import { useLatest } from '../internal/hooks';
 
 export type { DashTreeNode } from '../internal/model';
 
@@ -172,7 +173,6 @@ DashTreeChecklist.propTypes = {
   /**
    * component CSS style
    */
-  // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.any,
   /**
    * node CSS class
@@ -181,10 +181,19 @@ DashTreeChecklist.propTypes = {
   /**
    * node CSS style
    */
-  // eslint-disable-next-line react/forbid-prop-types
   nodeStyle: PropTypes.any,
 
-  tree: PropTypes.arrayOf(nodeShape).isRequired,
+  /**
+   * tree to display
+   */
+  tree: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      disabled: PropTypes.bool,
+      children: PropTypes.arrayOf(nodeShape),
+    }).isRequired
+  ).isRequired,
 
   /**
    * list of selected tree node ids

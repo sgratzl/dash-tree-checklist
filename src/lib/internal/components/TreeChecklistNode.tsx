@@ -45,14 +45,19 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
           className="dash-tree-checklist-node-name"
           onClick={toggler}
           title="Toggle Node Expansion"
-          disabled={!expanded || node.disabled}
+          disabled={!expanded || (node.disabled ?? false)}
         >
           {node.name}
         </button>
       )}
       {!node.children && (
         <label className="dash-tree-checklist-node-name">
-          <input type="checkbox" disabled={node.disabled} checked={selected.has(node)} onChange={togglerSelected} />
+          <input
+            type="checkbox"
+            disabled={node.disabled ?? false}
+            checked={selected.has(node)}
+            onChange={togglerSelected}
+          />
           {node.name}
         </label>
       )}

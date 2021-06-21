@@ -1,8 +1,8 @@
 export interface DashTreeNode {
   readonly id: string;
   readonly name: string;
-  readonly disabled?: boolean;
-  children?: readonly DashTreeNode[];
+  readonly disabled?: boolean | null;
+  children?: readonly DashTreeNode[] | null;
 }
 
 export function alwaysFalse(): boolean {

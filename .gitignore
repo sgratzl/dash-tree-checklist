@@ -285,6 +285,7 @@ GitHub.sublime-settings
 /dash_tree_checklist/*.json
 /dash_tree_checklist/*.map
 /dash_tree_checklist/*.py
+!/dash_tree_checklist/_*.py
 /deps
 /man
 /inst
