@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import PropTypes, { Validator } from 'prop-types';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { DashTreeNode, filterTree, asFilterFunction } from '../internal/model';
 import './DashTreeChecklist.css';
 import TreeChecklistNode from '../internal/components/TreeChecklistNode';
@@ -78,6 +78,16 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
   const selectionTree = useMemo(() => filterTree(tree, selected.has), [tree, selected.has]);
   const expanded = useNodeIDHandler(props.expanded, 'expanded', props.setProps);
 
+  const [searchValue, setSearchValue] = useState('');
+  const setSearch = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => setSearchValue(evt.currentTarget.value),
+    [setSearchValue]
+  );
+  const filteredTree = useMemo(
+    () => (searchValue ? filterTree(tree, (node) => node.name.includes(searchValue)) : tree),
+    [tree, searchValue]
+  );
+
   return (
     <div id={id} className={classNames('dash-tree-checklist', className)} style={style}>
       <h5>Selected Nodes</h5>
@@ -91,15 +101,16 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
         className="dash-tree-checklist-tree-search"
         type="search"
         placeholder="Enter search term to filter nodes by"
+        onChange={setSearch}
       />
       <div className="dash-tree-checklist-tree-wrapper">
-        <div>
-          {tree.map((n) => (
+        <div className={classNames(filteredTree.length === 0 && tree.length > 0 && 'dash-tree-checklist-no-results')}>
+          {filteredTree.map((n) => (
             <TreeChecklistNode
               key={n.id}
               node={n}
               selected={selected}
-              expanded={expanded}
+              expanded={searchValue ? undefined : expanded}
               className={nodeClassName}
               style={nodeStyle}
             />

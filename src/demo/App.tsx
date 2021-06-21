@@ -20,6 +20,41 @@ const App: React.FC = () => {
             id: 'a.a',
             name: 'A.A',
           },
+          {
+            id: 'a.b',
+            name: 'A.B',
+          },
+          {
+            id: 'a.c',
+            name: 'A.C',
+          },
+          {
+            id: 'a.d',
+            name: 'A.D',
+            children: [{ id: 'a.d.a', name: 'A.D.A' }],
+          },
+        ],
+      },
+      {
+        id: 'b',
+        name: 'B',
+        children: [
+          {
+            id: 'b.a',
+            name: 'B.A',
+          },
+          {
+            id: 'b.b',
+            name: 'B.B',
+          },
+          {
+            id: 'b.c',
+            name: 'B.C',
+          },
+          {
+            id: 'b.d',
+            name: 'B.D',
+          },
         ],
       },
     ],

@@ -42,6 +42,10 @@
   overflow-y: auto;
 }
 
+.dash-tree-checklist-no-results::after {
+  content: 'No matching nodes found';
+  opacity: 0.5;
+}
 
 .dash-tree-checklist-node {
 }
@@ -49,7 +53,6 @@
 .dash-tree-checklist-node-name {
   position: relative;
   padding: 0;
-  padding-left: 0.8em;
 }
 
 button.dash-tree-checklist-node-name {
@@ -64,6 +67,14 @@ button.dash-tree-checklist-node-name:hover {
   color: black;
 }
 
+.dash-tree-checklist-node-children {
+  padding-left: 0.3em;
+}
+
+.dash-tree-checklist-node__inner > .dash-tree-checklist-node-name {
+  padding-left: 0.8em;
+}
+
 .dash-tree-checklist-node__inner > .dash-tree-checklist-node-name::before {
   content: '›';
   transition: transform 0.25s ease;
@@ -75,6 +86,7 @@ button.dash-tree-checklist-node-name:hover {
   align-items: center;
   justify-content: center;
 }
+
 
 .dash-tree-checklist-node__expanded > .dash-tree-checklist-node-name::before {
   transform: rotate(90deg);
