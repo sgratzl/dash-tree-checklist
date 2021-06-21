@@ -84,11 +84,14 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
     [setSearchValue]
   );
   const filteredTree = useMemo(
-    () => (searchValue ? filterTree(tree, (node) => node.name.includes(searchValue)) : tree),
+    () =>
+      searchValue ? filterTree(tree, (node) => node.name.toLowerCase().includes(searchValue.toLowerCase())) : tree,
     [tree, searchValue]
   );
   const searchExpanded = useMemo(() => {
-    const first = expandToFirstMatch(filteredTree, (node) => node.name.includes(searchValue));
+    const first = expandToFirstMatch(filteredTree, (node) =>
+      node.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
     return {
       toggle: expanded.toggle,
       has: (v: DashTreeNode) => expanded.has(v) || first.has(v.id),
