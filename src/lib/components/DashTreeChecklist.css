@@ -44,9 +44,6 @@
   opacity: 0.5;
 }
 
-.dash-tree-checklist-node {
-}
-
 .dash-tree-checklist-node-name {
   position: relative;
   padding: 0;
@@ -58,6 +55,7 @@ button.dash-tree-checklist-node-name {
   background: none;
   font: inherit;
   color: inherit;
+  text-align: left;
 }
 
 button.dash-tree-checklist-node-name:hover {
@@ -90,7 +88,13 @@ button.dash-tree-checklist-node-name:hover {
 
 .dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name {
   cursor: pointer;
+  margin-bottom: 0;
 }
 .dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name:hover {
   color: black;
+}
+
+.dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name > input {
+  margin-right: 0.25em;
+  display: inline-block;
 }

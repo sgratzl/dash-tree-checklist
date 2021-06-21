@@ -1,7 +1,6 @@
-/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import PropTypes, { Validator } from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { DashTreeNode, filterTree, asFilterFunction } from '../internal/model';
 import './DashTreeChecklist.css';
@@ -135,23 +134,6 @@ DashTreeChecklist.defaultProps = {
   style: undefined,
 };
 
-const nodeShape: Validator<DashTreeNode> = function nodeShape(
-  this: unknown,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  props: { [key: string]: any },
-  propName: string,
-  componentName: string,
-  location: string,
-  propFullName: string
-): Error | null {
-  return PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-    children: PropTypes.arrayOf(nodeShape),
-  }).call(this, props, propName, componentName, location, propFullName);
-};
-
 DashTreeChecklist.propTypes = {
   /**
    * The ID used to identify this component in Dash callbacks.
@@ -173,6 +155,7 @@ DashTreeChecklist.propTypes = {
   /**
    * component CSS style
    */
+  // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.any,
   /**
    * node CSS class
@@ -181,6 +164,7 @@ DashTreeChecklist.propTypes = {
   /**
    * node CSS style
    */
+  // eslint-disable-next-line react/forbid-prop-types
   nodeStyle: PropTypes.any,
 
   /**
@@ -191,7 +175,14 @@ DashTreeChecklist.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       disabled: PropTypes.bool,
-      children: PropTypes.arrayOf(nodeShape),
+      children: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          disabled: PropTypes.bool,
+          children: PropTypes.arrayOf(PropTypes.any.isRequired),
+        }).isRequired
+      ),
     }).isRequired
   ).isRequired,
 
