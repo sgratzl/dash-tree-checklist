@@ -1,4 +1,3 @@
-
 .dash-tree-checklist {
   display: flex;
   flex-direction: column;
@@ -22,11 +21,9 @@
   opacity: 0.5;
 }
 
-
 .dash-tree-checklist-tree-search {
   margin-bottom: 0.25em;
 }
-
 
 .dash-tree-checklist-tree-wrapper {
   flex: 1 1 0;
@@ -87,7 +84,6 @@ button.dash-tree-checklist-node-name:hover {
   justify-content: center;
 }
 
-
 .dash-tree-checklist-node__expanded > .dash-tree-checklist-node-name::before {
   transform: rotate(90deg);
 }
@@ -96,5 +92,5 @@ button.dash-tree-checklist-node-name:hover {
   cursor: pointer;
 }
 .dash-tree-checklist-node__leaf > .dash-tree-checklist-node-name:hover {
-  color: black
+  color: black;
 }
