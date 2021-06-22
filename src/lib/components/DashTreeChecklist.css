@@ -49,8 +49,6 @@
   padding: 0;
 }
 
-
-
 .dash-tree-checklist-node-children {
   margin-left: 0.8em;
 }
@@ -86,7 +84,6 @@
 .dash-tree-checklist-node-expander:hover {
   color: black;
 }
-
 
 .dash-tree-checklist-node__expanded > .dash-tree-checklist-node-expander {
   transform: rotate(90deg);
