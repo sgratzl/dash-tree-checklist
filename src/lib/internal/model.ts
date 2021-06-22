@@ -1,6 +1,9 @@
 export interface DashTreeNode {
   readonly id: string;
   readonly name: string;
+  /**
+   * disable selection of this item
+   */
   readonly disabled?: boolean | null;
   children?: readonly DashTreeNode[] | null;
 }
@@ -21,9 +24,14 @@ export function asFilterFunction(ids?: string[]): (node: DashTreeNode) => boolea
   return (node) => r.has(node.id);
 }
 
-export function filterTree(tree: DashTreeNode[], filter: (node: DashTreeNode) => boolean): DashTreeNode[] {
+export function filterTree(
+  tree: DashTreeNode[],
+  filter: (node: DashTreeNode) => boolean,
+  includeAllChildrenOnMatch = true
+): DashTreeNode[] {
   const visit = (node: DashTreeNode): DashTreeNode | null => {
-    if (filter(node)) {
+    const matchSelf = filter(node);
+    if (matchSelf && (includeAllChildrenOnMatch || !node.children)) {
       // whole node
       return node;
     }
@@ -40,9 +48,15 @@ export function filterTree(tree: DashTreeNode[], filter: (node: DashTreeNode) =>
       }
     });
     if (filtered.length === 0) {
+      if (matchSelf) {
+        return {
+          ...node,
+          children: undefined,
+        };
+      }
       return null;
     }
-    if (filtered.length === node.children.length) {
+    if (filtered.length === node.children.length && includeAllChildrenOnMatch) {
       return node;
     }
     return {
@@ -80,4 +94,20 @@ export function expandToFirstMatch(tree: DashTreeNode[], filter: (node: DashTree
   };
   pathToMatch(tree[0]);
   return mustHave;
+}
+
+export function someChildrenMatch(root: DashTreeNode, pred: (node: DashTreeNode) => boolean): boolean {
+  const visit = (node: DashTreeNode): boolean => {
+    if (pred(node)) {
+      return true;
+    }
+    if (!node.children) {
+      return false;
+    }
+    return node.children.some((d) => visit(d));
+  };
+  if (!root.children) {
+    return false;
+  }
+  return root.children.some((d) => visit(d));
 }

@@ -15,6 +15,7 @@ const App: React.FC = () => {
       {
         id: 'a',
         name: 'A',
+        disabled: true,
         children: [
           {
             id: 'a.a',

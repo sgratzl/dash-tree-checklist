@@ -49,29 +49,27 @@
   padding: 0;
 }
 
-button.dash-tree-checklist-node-name {
+
+
+.dash-tree-checklist-node-children {
+  margin-left: 0.8em;
+}
+
+.dash-tree-checklist-node__inner {
+  position: relative;
+}
+.dash-tree-checklist-node__inner > .dash-tree-checklist-node-name {
+  margin-left: 0.8em;
+}
+
+.dash-tree-checklist-node-expander {
   cursor: pointer;
   border: 0;
   background: none;
   font: inherit;
   color: inherit;
   text-align: left;
-}
 
-button.dash-tree-checklist-node-name:hover {
-  color: black;
-}
-
-.dash-tree-checklist-node-children {
-  padding-left: 0.7em;
-}
-
-.dash-tree-checklist-node__inner > .dash-tree-checklist-node-name {
-  padding-left: 0.8em;
-}
-
-.dash-tree-checklist-node__inner > .dash-tree-checklist-node-name::before {
-  content: '›';
   transition: transform 0.25s ease;
   position: absolute;
   left: 0;
@@ -85,7 +83,12 @@ button.dash-tree-checklist-node-name:hover {
   font-size: 120%;
 }
 
-.dash-tree-checklist-node__expanded > .dash-tree-checklist-node-name::before {
+.dash-tree-checklist-node-expander:hover {
+  color: black;
+}
+
+
+.dash-tree-checklist-node__expanded > .dash-tree-checklist-node-expander {
   transform: rotate(90deg);
 }
 

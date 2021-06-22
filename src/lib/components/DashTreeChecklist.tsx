@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import PropTypes from 'prop-types';
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { DashTreeNode, filterTree, asFilterFunction, expandToFirstMatch } from '../internal/model';
+import { DashTreeNode, filterTree, asFilterFunction, expandToFirstMatch, someChildrenMatch } from '../internal/model';
 import './DashTreeChecklist.css';
 import TreeChecklistNode from '../internal/components/TreeChecklistNode';
 import { classNames } from '../utils';
@@ -98,12 +98,37 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
     };
   }, [expanded, filteredTree, searchValue]);
 
+  const [currentSelectionExpanded, setCurrentSelectionExpanded] = useState(new Set<string>());
+
+  const selectionExpanded = useMemo(() => {
+    return {
+      toggle: (v: DashTreeNode) =>
+        setCurrentSelectionExpanded((current) => {
+          const next = new Set(current);
+          if (current.has(v.id)) {
+            next.delete(v.id);
+          } else {
+            next.add(v.id);
+          }
+          return next;
+        }),
+      has: (v: DashTreeNode) => someChildrenMatch(v, selected.has) || currentSelectionExpanded.has(v.id),
+    };
+  }, [selected, currentSelectionExpanded, setCurrentSelectionExpanded]);
+
   return (
     <div id={id} className={classNames('dash-tree-checklist', className)} style={style}>
       <h5>Selected Nodes</h5>
       <div className="dash-tree-checklist-selection">
         {selectionTree.map((n) => (
-          <TreeChecklistNode key={n.id} node={n} selected={selected} className={nodeClassName} style={nodeStyle} />
+          <TreeChecklistNode
+            key={n.id}
+            node={n}
+            selected={selected}
+            expanded={selectionExpanded}
+            className={nodeClassName}
+            style={nodeStyle}
+          />
         ))}
       </div>
       <h5>Tree Browser</h5>

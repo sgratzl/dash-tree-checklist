@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/prop-types */
-import React, { FC, useCallback } from 'react';
-import type { DashTreeNode } from '../model';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
+import { DashTreeNode, someChildrenMatch } from '../model';
 import { classNames } from '../../utils';
 
 export type TreeChecklistNodeProps = {
   node: DashTreeNode;
   selected: { has: (node: DashTreeNode) => boolean; toggle: (node: DashTreeNode) => void };
-  expanded?: { has: (node: DashTreeNode) => boolean; toggle: (node: DashTreeNode) => void };
+  expanded: { has: (node: DashTreeNode) => boolean; toggle: (node: DashTreeNode) => void };
   className?: string;
   style?: React.CSSProperties;
 };
@@ -25,7 +25,17 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
   const togglerSelected = useCallback(() => {
     toggleS(node);
   }, [toggleS, node]);
-  const isExpanded = node.children && (!expanded || expanded.has(node));
+  const isExpanded = node.children && expanded.has(node);
+
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+    ref.current.indeterminate = !selected.has(node) && someChildrenMatch(node, selected.has);
+  }, [ref, selected, node]);
+
   return (
     <div
       className={classNames(
@@ -34,25 +44,28 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
         node.children && 'dash-tree-checklist-node__inner',
         !node.children && 'dash-tree-checklist-node__leaf',
         selected && selected.has(node) && 'dash-tree-checklist-node__selected',
+        node.disabled && 'dash-tree-checklist-node__disabled',
         isExpanded && 'dash-tree-checklist-node__expanded'
       )}
       data-id={node.id}
       style={style}
     >
-      {node.children && expanded != null && (
+      {node.children != null && (
         <button
           type="button"
-          className="dash-tree-checklist-node-name"
+          className="dash-tree-checklist-node-expander"
           onClick={toggler}
           title="Toggle Node Expansion"
-          disabled={!expanded || (node.disabled ?? false)}
         >
-          {node.name}
+          ›
         </button>
       )}
-      {!node.children && (
+      {node.disabled ? (
+        <div className="dash-tree-checklist-node-name">{node.name}</div>
+      ) : (
         <label className="dash-tree-checklist-node-name">
           <input
+            ref={ref}
             type="checkbox"
             disabled={node.disabled ?? false}
             checked={selected.has(node)}
@@ -61,7 +74,6 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
           {node.name}
         </label>
       )}
-      {node.children && !expanded && <div className="dash-tree-checklist-node-name">{node.name}</div>}
 
       {node.children && isExpanded && (
         <div className="dash-tree-checklist-node-children">
