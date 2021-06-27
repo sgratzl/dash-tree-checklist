@@ -1,0 +1,79 @@
+{
+  "name": "dash_tree_checklist",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Advanced Tree Select for Dash",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sgratzl/dash-tree-checklist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sgratzl/dash-tree-checklist/issues"
+  },
+  "homepage": "https://github.com/sgratzl/dash-tree-checklist",
+  "author": "Samuel Gratzl <sam@sgratzl.com>",
+  "license": "Apache-2.0",
+  "main": "build/index.js",
+  "scripts": {
+    "clean": "rimraf dist build .eggs src/**/*.js src/**/*.map src/*.jl R/ DESCRIPTION NAMESPACE Project.toml .Rbuildignore man inst deps dash_tree_checklist/*.js dash_tree_checklist/*.json dash_tree_checklist/Dash*.py dash_tree_checklist/__pycache__ dash_tree_checklist.egg*",
+    "compile": "tsc -p tsconfig.json",
+    "clean:compile": "rimraf src/**/*.js src/**/*.map",
+    "start": "webpack-dev-server --config webpack.serve.config.js --mode development --hot",
+    "validate-init": "python _validate_init.py",
+    "prepublishOnly": "npm run validate-init",
+    "build:js": "webpack --mode production",
+    "build:backends": "dash-generate-components ./src/lib/components dash_tree_checklist -p package-info.json --r-prefix dt --jl-prefix dt",
+    "build:backends-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:backends)",
+    "build": "npm run build:js && npm run compile && npm run build:backends",
+    "build:activated": "npm run build:js && npm run compile && npm run build:backends-activated",
+    "lint": "yarn run eslint && yarn run prettier",
+    "fix": "yarn run eslint:fix && yarn run prettier:write",
+    "prettier:write": "prettier \"*\" \"*/**\" --write",
+    "prettier": "prettier \"*\" \"*/**\" --check",
+    "eslint": "eslint src --ext .ts,.tsx",
+    "eslint:fix": "yarn run eslint --fix"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "@types/react-loader": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "copyfiles": "^2.1.1",
+    "css-loader": "^3.0.0",
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.3.0",
+    "react": "^16.8.6",
+    "react-docgen": "^5.4.0",
+    "react-dom": "^16.8.6",
+    "rimraf": "^3.0.2",
+    "style-loader": "^0.23.1",
+    "styled-jsx": "^3.2.1",
+    "ts-loader": "^8.1.0",
+    "typescript": "^4.2.4",
+    "webpack": "4.36.1",
+    "webpack-cli": "3.3.6",
+    "webpack-dev-server": "^3.11.2"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "src/lib/components/DashTreeChecklist.js": {
+    "description": "DashTreeChecklist shows an interactive parallel set / sankey diagram",
+    "displayName": "DashTreeChecklist",
+    "methods": [],
+    "props": {
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The ID used to identify this component in Dash callbacks.",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "set props helper for dash",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "children": {
+        "type": {
+          "name": "node"
+        },
+        "required": false,
+        "description": "children helper for dash",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "className": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "component CSS class",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "style": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "component CSS style",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "nodeClassName": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "node CSS class",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "nodeStyle": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "node CSS style",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "tree": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "id": {
+                "name": "string",
+                "required": true
+              },
+              "name": {
+                "name": "string",
+                "required": true
+              },
+              "disabled": {
+                "name": "bool",
+                "required": false
+              },
+              "children": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "id": {
+                      "name": "string",
+                      "required": true
+                    },
+                    "name": {
+                      "name": "string",
+                      "required": true
+                    },
+                    "disabled": {
+                      "name": "bool",
+                      "required": false
+                    },
+                    "children": {
+                      "name": "arrayOf",
+                      "value": {
+                        "name": "any"
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true,
+        "description": "tree to display"
+      },
+      "selection": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": false,
+        "description": "list of selected tree node ids",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "expanded": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": false,
+        "description": "list of expanded tree nodes",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "labels": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      }
+    }
+  }
+}

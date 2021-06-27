@@ -1,0 +1,13 @@
+Package: dashTreeChecklist
+Title: Advanced Tree Select for Dash
+Version: 0.2.0
+Description: Advanced Tree Select for Dash
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: Apache-2.0 + file LICENSE
+URL: https://github.com/sgratzl/dash-tree-checklist
+BugReports: https://github.com/sgratzl/dash-tree-checklist/issues
+Encoding: UTF-8
+LazyData: true
+KeepSource: true
