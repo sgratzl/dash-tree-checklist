@@ -16,8 +16,7 @@
   min-height: 1.5em;
 }
 
-.dash-tree-checklist-selection:empty::after {
-  content: 'Select one more more nodes from below';
+.dash-tree-checklist-selection__empty {
   opacity: 0.5;
 }
 
@@ -40,8 +39,7 @@
   padding-left: 0.8em;
 }
 
-.dash-tree-checklist-no-results::after {
-  content: 'No matching nodes found';
+.dash-tree-checklist-no-results {
   opacity: 0.5;
 }
 

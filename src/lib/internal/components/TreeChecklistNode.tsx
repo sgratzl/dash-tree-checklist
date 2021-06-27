@@ -10,11 +10,19 @@ export type TreeChecklistNodeProps = {
   expanded: { has: (node: DashTreeNode) => boolean; toggle: (node: DashTreeNode) => void };
   className?: string;
   style?: React.CSSProperties;
+  toggleNodeExpansion: string;
 };
 /**
  * DashTreeChecklist shows an interactive parallel set / sankey diagram
  */
-const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expanded, className, style }) => {
+const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({
+  node,
+  selected,
+  expanded,
+  className,
+  style,
+  toggleNodeExpansion,
+}) => {
   const toggleS = selected.toggle;
   const toggleE = expanded?.toggle;
   const toggler = useCallback(() => {
@@ -55,7 +63,7 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
           type="button"
           className="dash-tree-checklist-node-expander"
           onClick={toggler}
-          title="Toggle Node Expansion"
+          title={toggleNodeExpansion}
         >
           ›
         </button>
@@ -85,6 +93,7 @@ const TreeChecklistNode: FC<TreeChecklistNodeProps> = ({ node, selected, expande
               expanded={expanded}
               className={className}
               style={style}
+              toggleNodeExpansion={toggleNodeExpansion}
             />
           ))}
         </div>

@@ -22,12 +22,32 @@ export interface DashChangeAbleTreeChecklistProps {
   expanded?: string[];
 }
 
+export interface DashTreeChecklistLabels {
+  selectedNodes: string;
+  treeBrowser: string;
+  searchPlaceholder: string;
+  toggleNodeExpansion: string;
+  emptySelections: string;
+  noResults: string;
+}
+
+const DEFAULT_LABELS: DashTreeChecklistLabels = {
+  selectedNodes: 'Selected Nodes',
+  treeBrowser: 'Tree Browser',
+  searchPlaceholder: 'Enter search term to filter nodes by',
+  toggleNodeExpansion: 'Toggle Node Expansion',
+  emptySelections: 'Select one more more nodes from below',
+  noResults: 'No matching nodes found',
+};
+
 export interface DashReadOnlyTreeChecklistProps {
   tree: DashTreeNode[];
   className?: string;
   style?: React.CSSProperties;
   nodeClassName?: string;
   nodeStyle?: React.CSSProperties;
+
+  labels?: Partial<DashTreeChecklistLabels>;
 }
 export type DashTreeChecklistProps = DashReadOnlyTreeChecklistProps &
   DashChangeAbleTreeChecklistProps & {
@@ -73,6 +93,10 @@ export function useNodeIDHandler(
  */
 const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
   const { id, children, tree, className, style, nodeClassName, nodeStyle } = props;
+  const labels = {
+    ...DEFAULT_LABELS,
+    ...(props.labels || {}),
+  };
 
   const selected = useNodeIDHandler(props.selection, 'selection', props.setProps);
   const selectionTree = useMemo(() => filterTree(tree, selected.has), [tree, selected.has]);
@@ -118,7 +142,7 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
 
   return (
     <div id={id} className={classNames('dash-tree-checklist', className)} style={style}>
-      <h5>Selected Nodes</h5>
+      <h5>{labels.selectedNodes}</h5>
       <div className="dash-tree-checklist-selection">
         {selectionTree.map((n) => (
           <TreeChecklistNode
@@ -128,14 +152,18 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
             expanded={selectionExpanded}
             className={nodeClassName}
             style={nodeStyle}
+            toggleNodeExpansion={labels.toggleNodeExpansion}
           />
         ))}
+        {selectionTree.length === 0 && (
+          <div className="dash-tree-checklist-selection__empty">{labels.emptySelections}</div>
+        )}
       </div>
-      <h5>Tree Browser</h5>
+      <h5>{labels.treeBrowser}</h5>
       <input
         className="dash-tree-checklist-tree-search"
         type="search"
-        placeholder="Enter search term to filter nodes by"
+        placeholder={labels.searchPlaceholder}
         onChange={setSearch}
       />
       <div className="dash-tree-checklist-tree-wrapper">
@@ -148,8 +176,10 @@ const DashTreeChecklist: FC<DashTreeChecklistProps> = (props) => {
               expanded={searchValue ? searchExpanded : expanded}
               className={nodeClassName}
               style={nodeStyle}
+              toggleNodeExpansion={labels.toggleNodeExpansion}
             />
           ))}
+          {filteredTree.length === 0 && tree.length > 0 ? labels.noResults : null}
         </div>
       </div>
       {children}
@@ -167,6 +197,7 @@ DashTreeChecklist.defaultProps = {
   nodeClassName: undefined,
   nodeStyle: undefined,
   style: undefined,
+  labels: undefined,
 };
 
 DashTreeChecklist.propTypes = {
@@ -229,6 +260,9 @@ DashTreeChecklist.propTypes = {
    * list of expanded tree nodes
    */
   expanded: PropTypes.arrayOf(PropTypes.string.isRequired),
+
+  // eslint-disable-next-line react/forbid-prop-types
+  labels: PropTypes.object,
 };
 
 export default DashTreeChecklist;
