@@ -31,7 +31,7 @@
     "prettier:write": "prettier \"*\" \"*/**\" --write",
     "prettier": "prettier \"*\" \"*/**\" --check",
     "eslint": "eslint src --ext .ts,.tsx",
-    "eslint:fix": "npm run eslint --fix"
+    "eslint:fix": "npm run eslint -- --fix"
   },
   "dependencies": {
     "prop-types": "^15.7.2"
