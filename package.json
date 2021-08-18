@@ -26,12 +26,12 @@
     "build:backends-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:backends)",
     "build": "npm run build:js && npm run compile && npm run build:backends",
     "build:activated": "npm run build:js && npm run compile && npm run build:backends-activated",
-    "lint": "yarn run eslint && yarn run prettier",
-    "fix": "yarn run eslint:fix && yarn run prettier:write",
+    "lint": "npm run eslint && npm run prettier",
+    "fix": "npm run eslint:fix && npm run prettier:write",
     "prettier:write": "prettier \"*\" \"*/**\" --write",
     "prettier": "prettier \"*\" \"*/**\" --check",
     "eslint": "eslint src --ext .ts,.tsx",
-    "eslint:fix": "yarn run eslint --fix"
+    "eslint:fix": "npm run eslint --fix"
   },
   "dependencies": {
     "prop-types": "^15.7.2"
