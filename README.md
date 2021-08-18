@@ -2,11 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-
 Dash Tree Checklist is a [Plot.ly Dash](https://dash.plotly.com) extension for rendering file explorer like trees with a search field. Elements can be searched, selected, and they will appear on the top selected field.
 
 ![image](https://user-images.githubusercontent.com/4129778/129817600-73febb7f-efd7-494e-a862-e13ef4268ac4.png)
-
 
 ## Usage
 
